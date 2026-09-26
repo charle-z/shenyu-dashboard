@@ -34,6 +34,11 @@ import * as echarts from "echarts";
 import { resizableComponents } from "../../../utils/resizable";
 import { getCurrentLocale, getIntlContent } from "../../../utils/IntlUtils";
 import AuthButton from "../../../utils/AuthButton";
+import {
+  sortByDateCreated,
+  sortByInstanceState,
+  sortByLastHeartBeatTime,
+} from "../../../utils/tableSorters";
 
 const { Text } = Typography;
 
@@ -409,7 +414,7 @@ export default class Instance extends Component {
           ellipsis: true,
           key: "lastHeartBeatTime",
           width: 120,
-          sorter: (a, b) => (a.instanceType > b.instanceType ? 1 : -1),
+          sorter: sortByLastHeartBeatTime,
           render: (text) => {
             return (
               <div style={{ color: "#1f640a" }}>
@@ -425,7 +430,7 @@ export default class Instance extends Component {
           ellipsis: true,
           key: "dateCreated",
           width: 120,
-          sorter: (a, b) => (a.instanceType > b.instanceType ? 1 : -1),
+          sorter: sortByDateCreated,
           render: (text) => {
             return (
               <div style={{ color: "#1f640a" }}>
@@ -441,7 +446,7 @@ export default class Instance extends Component {
           ellipsis: true,
           key: "instanceState",
           width: 120,
-          sorter: (a, b) => (a.instanceType > b.instanceType ? 1 : -1),
+          sorter: sortByInstanceState,
           render: (state) => {
             if (state === 1) {
               return (

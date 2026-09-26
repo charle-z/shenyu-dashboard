@@ -31,6 +31,7 @@ import {
 import { connect } from "dva";
 import { Link } from "dva/router";
 import { resizableComponents } from "../../../utils/resizable";
+import { sortBySortOrder } from "../../../utils/tableSorters";
 import { getCurrentLocale, getIntlContent } from "../../../utils/IntlUtils";
 import AuthButton from "../../../utils/AuthButton";
 import { refreshAuthMenus } from "../../../utils/AuthRoute";
@@ -299,7 +300,7 @@ export default class NamespacePlugin extends Component {
           ellipsis: true,
           key: "sort",
           width: 120,
-          sorter: (a, b) => (a.role > b.role ? 1 : -1),
+          sorter: sortBySortOrder,
           render: (text) => {
             return <div style={{ color: "#014955" }}>{text}</div>;
           },
