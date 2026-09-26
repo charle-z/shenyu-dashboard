@@ -21,7 +21,7 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(fetchMcpServer, payload);
-      if (response) {
+      if (response.code === 200) {
         yield put({
           type: "saveList",
           payload: {
@@ -31,35 +31,43 @@ export default {
             pageSize: payload.pageSize,
           },
         });
+      } else {
+        message.warn(response.message);
       }
     },
     *add({ payload, callback }, { call, put }) {
       const response = yield call(addMcpServer, payload);
-      if (response) {
+      if (response.code === 200) {
         message.success(getIntlContent("SHENYU.COMMON.RESPONSE.ADD.SUCCESS"));
         yield put({ type: "reload" });
+        if (callback) callback();
+      } else {
+        message.warn(response.message);
       }
-      if (callback) callback();
     },
     *update({ payload, callback }, { call, put }) {
       const response = yield call(updateMcpServer, payload);
-      if (response) {
+      if (response.code === 200) {
         message.success(
           getIntlContent("SHENYU.COMMON.RESPONSE.UPDATE.SUCCESS"),
         );
         yield put({ type: "reload" });
+        if (callback) callback();
+      } else {
+        message.warn(response.message);
       }
-      if (callback) callback();
     },
     *delete({ payload, callback }, { call, put }) {
       const response = yield call(deleteMcpServer, payload);
-      if (response) {
+      if (response.code === 200) {
         message.success(
           getIntlContent("SHENYU.COMMON.RESPONSE.DELETE.SUCCESS"),
         );
         yield put({ type: "reload" });
+        if (callback) callback();
+      } else {
+        message.warn(response.message);
       }
-      if (callback) callback();
     },
     *reload(_, { put, select }) {
       const { currentPage, pageSize } = yield select(
