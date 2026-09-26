@@ -56,6 +56,13 @@ const { TabPane } = Tabs;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
+export const REQUEST_URL_PATTERN =
+  /^https?:\/\/([^:]+)(?::(\d+))?(\/.+)$/;
+
+export const getEnvironmentHost = (addressUrl) => {
+  return new URL(addressUrl).origin;
+};
+
 const objectToArray = (obj) => {
   return Object.keys(obj ?? {}).map((key, index) => ({
     index,
@@ -262,7 +269,7 @@ const FCForm = forwardRef(({ form, onSubmit }, ref) => {
             {
               type: "string",
               required: true,
-              pattern: /^https?:\/\/([^:]+):(\d+)(\/.+)$/,
+              pattern: REQUEST_URL_PATTERN,
             },
           ],
         })(
@@ -271,8 +278,7 @@ const FCForm = forwardRef(({ form, onSubmit }, ref) => {
               style={{ width: "40%" }}
               onChange={(envId) => {
                 const env = Object.values(envProps)[envId];
-                const url = new URL(env.addressUrl);
-                const host = `${url.protocol}//${url.hostname}:${url.port || "80"}`;
+                const host = getEnvironmentHost(env.addressUrl);
                 setInitialValue({ ...initialValue, host, envId });
                 const requestUrl = `${host}${initialValue.url ?? ""}`;
                 form.setFieldsValue({ requestUrl });
